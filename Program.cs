@@ -51,10 +51,11 @@ var app = builder.Build();
 // --- Middleware Pipeline ---
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
     app.UseHttpsRedirection();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Only use HTTPS redirection in Development (above)
 app.UseAuthentication();
