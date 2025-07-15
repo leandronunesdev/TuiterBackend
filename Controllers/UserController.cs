@@ -35,4 +35,20 @@ public class UserController : ControllerBase
         await _userService.CreateAsync(newUser);
         return Ok(new { newUser.Id, newUser.Username, newUser.Email });
     }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login([FromBody] LoginUserDto dto, [FromServices] JwtHelper jwtHelper)
+    {
+        var user = await _userService.GetByUsernameOrEmailAsync(dto.UsernameOrEmail);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            return Unauthorized("Invalid credentials.");
+
+        var token = jwtHelper.GenerateToken(user);
+
+        return Ok(new
+        {
+            Token = token,
+            User = new { user.Id, user.Username, user.Email }
+        });
+    }
 }
