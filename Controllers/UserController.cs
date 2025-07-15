@@ -19,6 +19,10 @@ public class UserController : ControllerBase
         if (existingUser != null)
             return BadRequest("Email already in use.");
 
+        var existingUserByUsername = await _userService.GetByUsernameAsync(dto.Username);
+        if (existingUserByUsername != null)
+            return BadRequest("Username already in use.");
+
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
         var newUser = new User
@@ -26,7 +30,6 @@ public class UserController : ControllerBase
             Username = dto.Username,
             Email = dto.Email,
             PasswordHash = passwordHash,
-            Bio = dto.Bio
         };
 
         await _userService.CreateAsync(newUser);

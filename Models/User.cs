@@ -15,7 +15,4 @@ public class User
 
     [BsonElement("passwordHash")]
     public string PasswordHash { get; set; }
-
-    [BsonElement("bio")]
-    public string Bio { get; set; }
 }
