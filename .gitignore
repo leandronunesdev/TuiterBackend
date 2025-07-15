@@ -39,3 +39,4 @@ Desktop.ini
 ## Ignore publish directory
 publish/
 out/
+.env

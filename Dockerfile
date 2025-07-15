@@ -1,7 +1,7 @@
 # Use the official ASP.NET runtime image as a parent
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
 
 # Build the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
