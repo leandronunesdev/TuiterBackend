@@ -39,6 +39,11 @@ public class UserController : ControllerBase
         if (existingUserByUsername != null)
             return BadRequest("Username already in use.");
 
+        if (string.IsNullOrWhiteSpace(dto.Password) || dto.Password.Length < 8)
+        {
+            return BadRequest("Invalid password. It must be at least 8 characters long.");
+        }
+
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
         var newUser = new User
