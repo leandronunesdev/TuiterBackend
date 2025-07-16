@@ -27,6 +27,14 @@ public class UserController : ControllerBase
         if (existingUser != null)
             return BadRequest("Email already in use.");
 
+        if (string.IsNullOrWhiteSpace(dto.Username) ||
+            dto.Username.Length < 4 ||
+            dto.Username.Length > 15 ||
+            !System.Text.RegularExpressions.Regex.IsMatch(dto.Username, @"^[A-Za-z0-9_]+$"))
+        {
+            return BadRequest("Invalid username. It must be 4-15 characters long and contain only letters, numbers, and underscores.");
+        }
+
         var existingUserByUsername = await _userService.GetByUsernameAsync(dto.Username);
         if (existingUserByUsername != null)
             return BadRequest("Username already in use.");
