@@ -1,4 +1,4 @@
-@TuiterBackend_HostAddress = http://localhost:5267
+@TuiterBackend_HostAddress = http://localhost:10000
 
 GET {{TuiterBackend_HostAddress}}/weatherforecast/
 Accept: application/json

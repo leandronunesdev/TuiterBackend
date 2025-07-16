@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using BCrypt.Net;
-
+using System.Net.Mail;
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
@@ -15,6 +14,15 @@ public class UserController : ControllerBase
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
     {
+        try
+        {
+            var mailAddress = new MailAddress(dto.Email);
+        }
+        catch
+        {
+            return BadRequest("Invalid email format.");
+        }
+
         var existingUser = await _userService.GetByEmailAsync(dto.Email);
         if (existingUser != null)
             return BadRequest("Email already in use.");
