@@ -64,6 +64,17 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+// Middleware para redirecionar a raiz para o Swagger
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/" || context.Request.Path == "")
+    {
+        context.Response.Redirect("/swagger/index.html", permanent: false);
+        return;
+    }
+    await next();
+});
+
 app.UseCors("AllowAll");
 
 app.UseSwagger();
