@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mail;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
@@ -11,7 +13,7 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost("Register")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
     {
         try
@@ -57,7 +59,7 @@ public class UserController : ControllerBase
         return Ok(new { newUser.Id, newUser.Username, newUser.Email });
     }
 
-    [HttpPost("Login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserDto dto, [FromServices] JwtHelper jwtHelper)
     {
         var user = await _userService.GetByUsernameOrEmailAsync(dto.UsernameOrEmail);
@@ -70,6 +72,26 @@ public class UserController : ControllerBase
         {
             Token = token,
             User = new { user.Id, user.Username, user.Email }
+        });
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMe()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        var user = await _userService.GetByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+        return Ok(new
+        {
+            user.Id,
+            user.Username,
+            user.Email
         });
     }
 }

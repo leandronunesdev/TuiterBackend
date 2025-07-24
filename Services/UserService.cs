@@ -32,4 +32,9 @@ public class UserService
     {
         return await _users.Find(u => u.Username == usernameOrEmail || u.Email == usernameOrEmail).FirstOrDefaultAsync();
     }
+
+    public async Task<User> GetByIdAsync(string id)
+    {
+        return await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
+    }
 }
