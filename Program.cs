@@ -13,6 +13,7 @@ builder.Services.Configure<JwtSettings>(
 // --- Service Registration ---
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<JwtHelper>();
+builder.Services.AddSingleton<PostService>();
 
 // --- Authentication & Authorization ---
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
