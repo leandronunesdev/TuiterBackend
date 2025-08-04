@@ -23,4 +23,9 @@ public class PostService
   {
     return await _posts.Find(p => p.Id.ToString() == id).FirstOrDefaultAsync();
   }
+
+  public async Task<List<Post>> GetPostsByUserIdAsync(string userId)
+  {
+    return await _posts.Find(p => p.UserId == userId && !p.IsDeleted).SortByDescending(p => p.CreatedAt).ToListAsync();
+  }
 }
